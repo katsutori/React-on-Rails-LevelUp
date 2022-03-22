@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 
 // Import States
 import * as sessionActions from './store/session';
+import { getAllJobs } from './store/jobs';
 
 function App() {
   const [loaded, setLoaded] = useState(false);
   const user = useSelector(state => state.session.user)
+  const jobs = useSelector(state => state.jobState.entries)
   const dispatch = useDispatch();
-
+  console.log('helllllllo',jobs)
   useEffect(() => {
     window.scrollTo({top:0, behavior: 'smooth'})
   }, [])
@@ -17,16 +19,18 @@ function App() {
   useEffect(() => {
     (async() => {
       // await dispatch(sessionActions.authenticate()).then(() => setLoaded(true))
-      const response = await fetch(`api/v1/jobs`)
-      const data = await response.json()
-      console.log('heeeeeeeelo', data)
+      await dispatch(getAllJobs())
     })();
   }, [dispatch, loaded]);
 
   if (!user) {
     return (
       <BrowserRouter>
-        <h1>Not loaded</h1>
+        <>
+          {jobs.map((job, idx) => (
+            <h1 key={idx}>{job.title}</h1>
+          ))}
+        </>
       </BrowserRouter>
     )
   }
