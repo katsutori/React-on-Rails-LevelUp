@@ -16,7 +16,10 @@ function App() {
 
   useEffect(() => {
     (async() => {
-      await dispatch(sessionActions.authenticate()).then(() => setLoaded(true))
+      // await dispatch(sessionActions.authenticate()).then(() => setLoaded(true))
+      const response = await fetch(`api/v1/jobs`)
+      const data = await response.json()
+      console.log('heeeeeeeelo', data)
     })();
   }, [dispatch, loaded]);
 
